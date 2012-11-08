@@ -1,0 +1,103 @@
+/**
+ * @class gato.css
+ *
+ * @desc Hoja de estilos del juego del gato
+ * 
+ * @author Andrez Ortiz
+ * 
+ * @copyright     Copyright 2012
+ * @version       gato_k v 1.0
+ * @package       gato_app/res/
+*/
+
+body{
+    background-color:black; 
+    background:url('img/back.png');    
+}
+
+#gato_wrapper{    
+    width:80%;
+    margin:auto;
+    font-family:fantasy;    
+    color:#c3c3c3;
+}
+
+#gato_titulo{
+    width:370px;
+    height:135px;
+    background: url('img/mac_droid.png') no-repeat;
+    position:relative;
+    left:-8%;
+    top:30px;
+    -moz-transform:scale(.6);
+    -o-transform:scale(0.6);
+    -webkit-transform: scale(0.6);
+    transform: scale(0.6);
+}
+#gato_tablero{
+    background:url('img/tablero.png') no-repeat;
+}
+
+#gato_tablero td{
+    cursor:pointer;        
+}
+
+.wins{
+    width: 70px;
+    height:40px;
+    font-size: 20pt;
+    float:left;
+    position:relative; 
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    filter: alpha(opacity=50);
+    -moz-opacity: 0.5;
+    -khtml-opacity: 0.5;
+    -o-opacity: 0.5;
+    opacity: 0.5;
+}
+
+#android_wins{
+    bottom: 131px;
+    left: 85%;
+}
+
+#mac_wins{
+    left: 9%;
+    top: 30px;
+}
+
+#turno{
+    float:right;
+    position:relative;
+    right: 25%;
+    top: 50px;
+}
+
+#turno div{
+    float:left;
+    margin-top:20%;    
+    filter: alpha(opacity=50);
+    -moz-opacity: 0.5;
+    -khtml-opacity: 0.5;
+    -o-opacity: 0.5;
+    opacity: 0.5;
+}
+
+#reiniciar{
+    background:url('img/refresh.png') no-repeat;
+    width:64px;
+    height:64px;
+    cursor:pointer;
+    float:right;
+    position:relative;
+    top:50px;
+    left:20%;
+}
+
+#reiniciar:hover{
+    filter: alpha(opacity=70);
+    -moz-opacity: 0.7;
+    -khtml-opacity: 0.7;
+    -o-opacity: 0.7;
+    opacity: 0.7;
+}
