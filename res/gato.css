@@ -9,12 +9,56 @@
  * @version       gato_k v 1.0
  * @package       gato_app/res/
 */
-
 body{
-    background-color:black; 
-    background:url('img/back.png');     
+    background:url('img/back2.png');     
     font-family:fantasy;    
     color:#c3c3c3;
+    background-color: #000000;  
+    background-position: center center;
+    background-repeat: no-repeat; 
+    /* Safari 4-5, Chrome 1-9 */ 
+    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#686060), to(#000000)); 
+    /* Safari 5.1+, Chrome 10+ */ 
+    background: -webkit-radial-gradient(circle, #686060, #000000); 
+    /* Firefox 3.6+ */ 
+    background: -moz-radial-gradient(circle, #686060, #000000); 
+    /* IE 10 */ 
+    background: -ms-radial-gradient(circle, #686060, #000000); 
+}
+
+#and_content{
+    float: right;
+    position: absolute;
+    right: 10%;
+    top: 10%;
+    width: 225px;
+}
+#android_back{
+    background: url('img/android2.png');
+    width: 206px;
+    height:225px;
+}
+
+#app_content{
+    bottom: 0;
+    left: 7%;
+    position: absolute;
+    width: 230px;
+}
+#apple_back{
+    background: url('img/apple2.png');
+    width:160px;
+    height: 200px;
+}
+
+#android_wins{
+    bottom: -10px;
+    left: 40%;
+}
+
+#mac_wins{
+    left: 75%;
+    top: -110px;
 }
 
 #gato_wrapper{    
@@ -56,16 +100,6 @@ body{
     opacity: 0.5;
 }
 
-#android_wins{
-    bottom: 131px;
-    left: 85%;
-}
-
-#mac_wins{
-    left: 9%;
-    top: 30px;
-}
-
 #turno{
     float:right;
     position:relative;
@@ -84,17 +118,17 @@ body{
 }
 
 #reiniciar{
-    background:url('img/refresh.png') no-repeat;
-    width:64px;
-    height:64px;
-    cursor:pointer;
-    float:right;
-    position:relative;
-    top:50px;
-    left:20%;
+    background: url("img/refresh.png") no-repeat scroll 0 0 transparent;
+    bottom: 3%;
+    cursor: pointer;
+    float: right;
+    height: 64px;
+    position: absolute;
+    right: 3%;
+    width: 64px;
 }
 
-#reiniciar:hover, {
+#reiniciar:hover {
     filter: alpha(opacity=70);
     -moz-opacity: 0.7;
     -khtml-opacity: 0.7;
@@ -116,8 +150,6 @@ a{
     -khtml-opacity: 0.5;
     -o-opacity: 0.5;
     opacity: 0.5;
-    
-    
 }
 
 a:hover{

@@ -48,14 +48,14 @@ function dibujaTablero(){
     for(i = 0; i< matriz.length; i++){
         out += "<tr id='row_"+i+"' height='100px' align='center'>";
         for(j=0; j< matriz[i].length; j++){ 
-            out += "<td width='100' id='column_"+i+j+"' onClick='juego("+i+","+j+")'> <img class='gato_img' src='' width='64' height='64'></td>";           
+            out += "<td width='100' id='column_"+i+j+"' onClick='juego("+i+","+j+")'> <img class='gato_img' src='' width='64' height='64' style='display:none;'></td>";           
         }
         out += '</tr>';
     }
     out += "</table>";     
     //Creo las tablas de Resulados
-    out += "<div class='wins' id='android_wins'><img src='res/img/cup.png'> <label>"+droid_wins+"</label></div>";
-    out += "<div class='wins' id='mac_wins'><img src='res/img/cup.png'> <label>"+mac_wins+"</label></div>";
+    out += "<div id='and_content'><div id='android_back'></div><div class='wins' id='android_wins'><img src='res/img/cup.png'> <label>"+droid_wins+"</label></div></div>";
+    out += "<div id='app_content'><div id='apple_back'></div><div class='wins' id='mac_wins'><img src='res/img/cup.png'> <label>"+mac_wins+"</label></div></div>";
     out += "<div id='turno'><div>Turno:</div> <img src='res/img/android.png'> <br>";
     out +=     "<input type='checkbox' id='players' name='players' onClick='players();'><label for='players'>2 Jugadores</label></div>";
     out += "<div id='reiniciar' title='Click para reiniciar juego' onclick='reboot(true);'></div>";
@@ -75,13 +75,20 @@ function juego(i,j){
     if(turno == 'android'){
         if(matriz[i][j]===0){
             set_jugada(i,j,1);
-            if(!ganador()) 
-                turno = 'apple';            
-            if(jugadores == 1)
-                juega_cpu();                
+            switch(ganador()){
+                case false:
+                    turno = 'apple';            
+                    if(jugadores == 1)
+                        juega_cpu();
+                    break;
+                case true: return; break;
+            } 
+                                
         } 
     //Cuando es el turno de apple
-    }else{
+    }
+    
+    if(turno == 'apple'){
         if(matriz[i][j]===0){  
             set_jugada(i,j,10);
             if(!ganador())
@@ -111,9 +118,8 @@ function ganador(){
         matriz[0][2] + matriz[1][2] +matriz[2][2] == 3 
         ){            
         alert('Android Gana');
-        droid_wins++;
-        $('#android_wins label').html(droid_wins);
-        setTimeout('reboot(false)',500);
+        $('#android_wins label').html(droid_wins++);
+        reboot(false);
         return true;
     }
     
@@ -128,9 +134,8 @@ function ganador(){
         matriz[0][2] + matriz[1][2] +matriz[2][2] == 30 
         ){
         alert('Apple Gana');
-        mac_wins++;
-        $('#mac_wins label').html(mac_wins);
-        setTimeout('reboot(false)',1000);
+        $('#mac_wins label').html(mac_wins++);
+        reboot(false);
         return true;
     } 
     
@@ -147,7 +152,7 @@ function ganador(){
     }      
     if(!ocupado){
         alert('Hubo un empate');
-        setTimeout('reboot(false);',500)
+        reboot(false);
         return true;
     }
     //Si no hay ganador retorno false para que el juego continue
@@ -189,8 +194,8 @@ function juega_cpu(){
     if(jugada != -1){
         set_jugada(jugada[0],jugada[1],10);        
         if(!ganador()) return turno='android';
-    }    
-    turno = 'android';  
+    }        
+    return turno = 'android';  
 }
 /**
   * @desc Funcion que inserta la jugada dependiendo del jugador
@@ -204,8 +209,10 @@ function juega_cpu(){
   * @returns {int} 
   */
 function set_jugada(fila,columna,player){    
-    matriz[fila][columna]= player;  
-    $('#column_'+fila+columna+' img').attr('src','res/img/'+turno+'.png'); 
+    matriz[fila][columna]= player; 
+    g = $('#column_'+fila+columna+' img');
+    g.attr({'src':'res/img/'+turno+'.png'}); 
+    g.css('display','');
 }
 /**
   * @desc Funcion que obtiene la posicion del tablero donde hay posibilidades de hacer 3 en fila columna o diagonal
@@ -323,7 +330,8 @@ function players(){
   * @params {bool} todo 
   */
 function reboot(todo){
-    $('.gato_img').each(function(){$(this).attr('src','')});
+    
+    $('.gato_img').each(function(){$(this).attr({'src':''}); $(this).css('display','none')});
     for(i=0; i<matriz.length; i++){
         for(j=0; j<matriz[i].length; j++){
             matriz[i][j] = 0;
