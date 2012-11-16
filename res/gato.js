@@ -20,6 +20,7 @@ var matriz = new Array (3);
 var turno = 'android';
 var droid_wins = 0;
 var mac_wins = 0;
+var last_empate = 10;
 var jugadores = 1;
 /******************************************************************************/
 /**
@@ -79,9 +80,19 @@ function juego(i,j){
                 case false:
                     turno = 'apple';            
                     if(jugadores == 1)
-                        juega_cpu();
+                        return setTimeout('juega_cpu();',330);
                     break;
-                case true: return; break;
+                case 'empate':
+                    if(last_empate === 10){
+                        last_empate = 1;
+                        return setTimeout('juega_cpu();',330);
+                    }else {
+                        turno = 'android';
+                        last_empate =10;
+                    }
+                    return;
+                    break;
+                case true:return;break;
             } 
                                 
         } 
@@ -89,11 +100,15 @@ function juego(i,j){
     }
     
     if(turno == 'apple'){
-        if(matriz[i][j]===0){  
-            set_jugada(i,j,10);
-            if(!ganador())
-                turno = 'android';
-        }
+        if(jugadores == 1){
+            setTimeout('juega_cpu();',330);
+        }else{
+            if(matriz[i][j]===0){  
+                set_jugada(i,j,10);
+                if(!ganador())
+                    turno = 'android';
+            }            
+        }        
     }
     //Dibujo la imagen del que dio click en el tablero
     $('#turno img').attr('src','res/img/'+turno+'.png');
@@ -117,8 +132,9 @@ function ganador(){
         matriz[0][1] + matriz[1][1] +matriz[2][1] == 3 ||
         matriz[0][2] + matriz[1][2] +matriz[2][2] == 3 
         ){            
-        alert('Android Gana');
-        $('#android_wins label').html(droid_wins++);
+        alert('Android Gana la Demanda!');
+        droid_wins++;
+        $('#android_wins label').html(droid_wins);
         reboot(false);
         return true;
     }
@@ -133,8 +149,9 @@ function ganador(){
         matriz[0][1] + matriz[1][1] +matriz[2][1] == 30 ||
         matriz[0][2] + matriz[1][2] +matriz[2][2] == 30 
         ){
-        alert('Apple Gana');
-        $('#mac_wins label').html(mac_wins++);
+        alert('Apple Gana la Demanda!');
+        mac_wins++;
+        $('#mac_wins label').html(mac_wins);
         reboot(false);
         return true;
     } 
@@ -151,9 +168,9 @@ function ganador(){
         if(ocupado)break;
     }      
     if(!ocupado){
-        alert('Hubo un empate');
+        alert('Nadie gana la Demanda =(');
         reboot(false);
-        return true;
+        return 'empate';
     }
     //Si no hay ganador retorno false para que el juego continue
     return false;
@@ -171,7 +188,23 @@ function juega_cpu(){
     jugada = get_jugada_ganadora(10);
     if(jugada != -1){
         set_jugada(jugada[0],jugada[1],10); 
-        if(!ganador()) return turno= 'android';       
+        switch(ganador()){
+            case false:
+                return turno = 'android';
+                break;
+            case 'empate':
+                if(last_empate === 10){
+                    last_empate = 1;
+                    return setTimeout('juega_cpu();',330);
+                }else {
+                    turno = 'android';
+                    return last_empate =10;
+                }
+                break;
+            case true:
+                return turno = 'android' ;
+                break;
+        }       
     
     }
     
@@ -179,22 +212,74 @@ function juega_cpu(){
     jugada = get_jugada_ganadora(1);
     if(jugada != -1){
         set_jugada(jugada[0],jugada[1],10);        
-        if(!ganador()) return turno='android';
+        switch(ganador()){
+            case false:
+                return turno = 'android';
+                break;
+            case 'empate':
+                if(last_empate === 10){
+                    last_empate = 1;
+                    return setTimeout('juega_cpu();',330);
+                }else {
+                    turno = 'android';
+                    return last_empate =10;
+                }
+                break;
+            case true:
+                return turno = 'android' ;
+                break;
+        }               
     }    
     
     //Ataca para busca poner 2 fichas juntas
     jugada = get_jugada(10);
     if(jugada != -1){
         set_jugada(jugada[0],jugada[1],10);        
-        if(!ganador()) return turno='android';
+        switch(ganador()){
+            case false:
+                return turno = 'android';
+                break;
+            case 'empate':
+                if(last_empate === 10){
+                    last_empate = 1;
+                    return setTimeout('juega_cpu();',330);
+                }else {
+                    turno = 'android';
+                    return last_empate =10;
+                }
+                break;
+            case true:
+                return turno = 'android' ;
+                break;
+        }
     } 
     
     //Defiende para busca que no se pongan 2 fichas juntas
     jugada = get_jugada(1);
     if(jugada != -1){
         set_jugada(jugada[0],jugada[1],10);        
-        if(!ganador()) return turno='android';
-    }        
+        switch(ganador()){
+            case false:
+                return turno = 'android';
+                break;
+            case 'empate':
+                if(last_empate === 10){
+                    last_empate = 1;
+                    return setTimeout('juega_cpu();',330);
+                }else {
+                    turno = 'android';
+                    return last_empate =10;
+                }
+                break;
+            case true:
+                return turno = 'android' ;
+                break;
+        }
+    }         
+    if(matriz[1][1] == 0) {set_jugada(1,1,10);return turno = 'android';}
+    
+    if(matriz[2][0] == 0) {set_jugada(2,0,10);}    
+    
     return turno = 'android';  
 }
 /**
@@ -283,27 +368,27 @@ function get_jugada_ganadora(x){
   * @returns {int} posicion
   */
 function get_jugada(x){ 
+    //Compruebo si se puede hacer jugada en diagonal
+    if(matriz[0][0] == x && matriz[1][1] == 0 && matriz[2][2] == 0) return [1,1] ;        
+    if(matriz[0][0] == 0 && matriz[1][1] == 0 && matriz[2][2] == x) return [1,1] ;  
+    if(matriz[0][0] == 0 && matriz[1][1] == x && matriz[2][2] == 0) return [0,0] ;   
+    //Compruebo si se puede hacer jugada en Diagonal invertida
+    if(matriz[0][2] == x && matriz[1][1] == 0 && matriz[2][0] == 0) return [1,1] ;
+    if(matriz[0][2] == 0 && matriz[1][1] == 0 && matriz[2][0] == x) return [1,1] ;  
+    if(matriz[0][2] == 0 && matriz[1][1] == x && matriz[2][0] == 0) return [0,2] ;  
+    //Pongo en el centro si es la primer jugada
+    //
     //Compruebo si se puede hacer jugada en fila con otra ficha
     for(i=0; i<3; i++){
         //Compruebo si se puede hacer jugada en las filas
         if(matriz[i][0] == x && matriz[i][1] == 0 && matriz[i][2] == 0) return [i,2] ; 
-        if(matriz[i][0] == 0 && matriz[i][1] == x && matriz[i][2] == 0) return [i,0] ; 
-        if(matriz[i][0] == 0 && matriz[i][1] == 0 && matriz[i][2] == x) return [i,1] ;         
-        //Compruebo si se puede hacer jugada en una fila
+        if(matriz[i][0] == 0 && matriz[i][1] == 0 && matriz[i][2] == x) return [i,1] ;   
+        if(matriz[i][0] == 0 && matriz[i][1] == x && matriz[i][2] == 0) return [i,2] ; 
+        //Compruebo si se puede hacer jugada en una columna
         if(matriz[0][i] == x && matriz[1][i] == 0 && matriz[2][i] == 0) return [2,i] ;
         if(matriz[0][i] == 0 && matriz[1][i] == x && matriz[2][i] == 0) return [0,i] ;
-        if(matriz[0][i] == 0 && matriz[1][i] == 0 && matriz[2][i] == x) return [1,i] ;
-    }    
-    //Compruebo si se puede hacer jugada en diagonal
-    if(matriz[0][0] == x && matriz[1][1] == 0 && matriz[2][2] == 0) return [2,2] ;    
-    if(matriz[0][0] == 0 && matriz[1][1] == x && matriz[2][2] == 0) return [0,0] ;    
-    if(matriz[0][0] == 0 && matriz[1][1] == 0 && matriz[2][2] == x) return [1,1] ;   
-    //Compruebo si se puede hacer jugada en Diagonal invertida
-    if(matriz[0][2] == x && matriz[1][1] == 0 && matriz[2][0] == 0) return [2,0] ;
-    if(matriz[0][2] == 0 && matriz[1][1] == x && matriz[2][0] == 0) return [0,2] ;
-    if(matriz[0][2] == 0 && matriz[1][1] == 0 && matriz[2][0] == x) return [1,1] ;    
-    //Pongo en el centro si es la primer jugada
-    if(matriz[1][1] == 0) return[1,1];    
+        if(matriz[0][i] == 0 && matriz[1][i] == 0 && matriz[2][i] == x) return [0,i] ;
+    }      
     return -1;
 }
 /**
@@ -329,9 +414,8 @@ function players(){
   * 
   * @params {bool} todo 
   */
-function reboot(todo){
-    
-    $('.gato_img').each(function(){$(this).attr({'src':''}); $(this).css('display','none')});
+function reboot(todo){    
+    $('.gato_img').each(function(){$(this).attr({'src':''});$(this).css('display','none')});
     for(i=0; i<matriz.length; i++){
         for(j=0; j<matriz[i].length; j++){
             matriz[i][j] = 0;
